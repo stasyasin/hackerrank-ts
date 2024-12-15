@@ -37,24 +37,53 @@
 //   1 <= nums.length <= 105
 // 1 <= nums[i] <= 109
 
+// function continuousSubarrays(nums: number[]): number {
+//   let left = 0, result = 0;
+//   let minVal = nums[0], maxVal = nums[0];
+//
+//   for (let right = 0; right < nums.length; right++) {
+//     minVal = Math.min(minVal, nums[right]);
+//     maxVal = Math.max(maxVal, nums[right]);
+//     while (maxVal - minVal > 2) {
+//       left++;
+//       minVal = Math.min(...nums.slice(left, right + 1));
+//       maxVal = Math.max(...nums.slice(left, right + 1));
+//     }
+//
+//     result += right - left + 1;
+//
+//
+//   }
+//
+//
+//   return result;
+// };
+
+
 function continuousSubarrays(nums: number[]): number {
   let left = 0, result = 0;
-  let minVal = nums[0], maxVal = nums[0];
+  const minDeque: number[] = [];
+  const maxDeque: number[] = [];
 
   for (let right = 0; right < nums.length; right++) {
-    minVal = Math.min(minVal, nums[right]);
-    maxVal = Math.max(maxVal, nums[right]);
-    while (maxVal - minVal > 2) {
+    while (minDeque.length && nums[minDeque[minDeque.length - 1]] >= nums[right]) {
+      minDeque.pop();
+    }
+    while (maxDeque.length && nums[maxDeque[maxDeque.length - 1]] <= nums[right]) {
+      maxDeque.pop();
+    }
+
+    minDeque.push(right);
+    maxDeque.push(right);
+
+    while (nums[maxDeque[0]] - nums[minDeque[0]] > 2) {
+      if (minDeque[0] === left) minDeque.shift();
+      if (maxDeque[0] === left) maxDeque.shift();
       left++;
-      minVal = Math.min(...nums.slice(left, right + 1));
-      maxVal = Math.max(...nums.slice(left, right + 1));
     }
 
     result += right - left + 1;
-
-
   }
-
 
   return result;
 };
