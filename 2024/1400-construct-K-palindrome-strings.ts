@@ -45,8 +45,6 @@ function canConstruct(s: string, k: number): boolean {
       oddCount++;
     }
   }
-  // console.log('asd dictChar', dictChar);
-  // console.log('asd oddCount', oddCount);
   return oddCount <=k;
 };
 
