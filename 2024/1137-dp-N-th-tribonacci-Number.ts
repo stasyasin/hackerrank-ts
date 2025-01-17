@@ -1,37 +1,33 @@
-// // 509. Fibonacci Number
+// 1137. N-th Tribonacci Number
+
+// The Tribonacci sequence Tn is defined as follows:
 //
-// The Fibonacci numbers, commonly denoted F(n) form a sequence, called the Fibonacci sequence, such that each number is the sum of the two preceding ones, starting from 0 and 1. That is,
+// T0 = 0, T1 = 1, T2 = 1, and Tn+3 = Tn + Tn+1 + Tn+2 for n >= 0.
 //
-//   F(0) = 0, F(1) = 1
-// F(n) = F(n - 1) + F(n - 2), for n > 1.
-//   Given n, calculate F(n).
+//   Given n, return the value of Tn.
 //
 //
 //
 //   Example 1:
 //
-// Input: n = 2
-// Output: 1
-// Explanation: F(2) = F(1) + F(0) = 1 + 0 = 1.
+// Input: n = 4
+// Output: 4
+// Explanation:
+//   T_3 = 0 + 1 + 1 = 2
+// T_4 = 1 + 1 + 2 = 4
 // Example 2:
 //
-// Input: n = 3
-// Output: 2
-// Explanation: F(3) = F(2) + F(1) = 1 + 1 = 2.
-// Example 3:
-//
-// Input: n = 4
-// Output: 3
-// Explanation: F(4) = F(3) + F(2) = 2 + 1 = 3.
+// Input: n = 25
+// Output: 1389537
 
-
-function fib(n: number): number {
+function  tribonacci(n: number): number {
   if (n===0) return 0;
   if (n===1) return 1;
-  const dp = [0,1];
-  for (let i=2; i<=n; i++) {
+  if (n===2) return 1;
+  const dp = [0,1,1];
+  for (let i=3; i<=n; i++) {
     const n = dp.length;
-    const curr = dp[n-1] + dp[n-2];
+    const curr = dp[n-1] + dp[n-2]+dp[n-3];
     dp.push(curr);
   }
 
@@ -39,6 +35,6 @@ function fib(n: number): number {
 
 };
 
-const n = 300;
-const result = fib(n);
+const n = 25;
+const result = tribonacci(n);
 console.log(result);
