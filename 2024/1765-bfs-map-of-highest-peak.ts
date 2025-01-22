@@ -1,60 +1,88 @@
-// // 1769. Minimum Number of Operations to Move All Balls to Each Box
+// // 1765. Map of Highest Peak
+// You are given an integer matrix isWater of size m x n that represents a map of land and water cells.
 //
-// You have n boxes. You are given a binary string boxes of length n, where boxes[i] is '0' if the ith box is empty, and '1' if it contains one ball.
+//   If isWater[i][j] == 0, cell (i, j) is a land cell.
+//   If isWater[i][j] == 1, cell (i, j) is a water cell.
+//   You must assign each cell a height in a way that follows these rules:
 //
-//   In one operation, you can move one ball from a box to an adjacent box. Box i is adjacent to box j if abs(i - j) == 1. Note that after doing so, there may be more than one ball in some boxes.
+//   The height of each cell must be non-negative.
+//   If the cell is a water cell, its height must be 0.
+// Any two adjacent cells must have an absolute height difference of at most 1. A cell is adjacent to another cell if the former is directly north, east, south, or west of the latter (i.e., their sides are touching).
+// Find an assignment of heights such that the maximum height in the matrix is maximized.
 //
-//   Return an array answer of size n, where answer[i] is the minimum number of operations needed to move all the balls to the ith box.
-//
-//   Each answer[i] is calculated considering the initial state of the boxes.
+//   Return an integer matrix height of size m x n where height[i][j] is cell (i, j)'s height. If there are multiple solutions, return any of them.
 //
 //
 //
-//   Example 1:
+// Example 1:
 //
-// Input: boxes = "110"
-// Output: [1,1,3]
-// Explanation: The answer for each box is as follows:
-// 1) First box: you will have to move one ball from the second box to the first box in one operation.
-// 2) Second box: you will have to move one ball from the first box to the second box in one operation.
-// 3) Third box: you will have to move one ball from the first box to the third box in two operations, and move one ball from the second box to the third box in one operation.
+//
+//
+// Input: isWater = [[0,1],[0,0]]
+// Output: [[1,0],[2,1]]
+// Explanation: The image shows the assigned heights of each cell.
+//   The blue cell is the water cell, and the green cells are the land cells.
 //   Example 2:
 //
-// Input: boxes = "001011"
-// Output: [11,8,5,4,3,4]
 //
 //
-// Constraints:
+// Input: isWater = [[0,0,1],[1,0,0],[0,0,0]]
+// Output: [[1,1,0],[0,1,1],[1,2,2]]
+// Explanation: A height of 2 is the maximum possible height of any assignment.
+//   Any height assignment that has a maximum height of 2 while still meeting the rules will also be accepted.
 //
-//   n == boxes.length
-// 1 <= n <= 2000
-// boxes[i] is either '0' or '1'.
+//
+//   Constraints:
+//
+// m == isWater.length
+// n == isWater[i].length
+// 1 <= m, n <= 1000
+// isWater[i][j] is 0 or 1.
+// There is at least one water cell.
+//
+//
+//   Note: This question is the same as 542: https://leetcode.com/problems/01-matrix/
 
-function minOperations(boxes: string): number[] {
-  const n = boxes.length;
-  const result = new Array(n).fill(0);
+function highestPeak(isWater: number[][]): number[][] {
+  const n = isWater.length;
+  const m = isWater[0].length;
+  const height: number[][] = Array.from({ length: n }, () => Array(m).fill(-1));
 
-  // Лівий прохід: кількість операцій зліва
-  let count = 0; // кількість кульок ліворуч
-  let ops = 0;   // сума операцій для переміщення цих кульок
+  const queue: [number, number][] = [];
+  const directions = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+
   for (let i = 0; i < n; i++) {
-    result[i] += ops;
-    count += boxes[i] === '1' ? 1 : 0;
-    ops += count;
+    for (let j = 0; j < m; j++) {
+      if (isWater[i][j] === 1) {
+        height[i][j] = 0;
+        queue.push([i, j]);
+      }
+    }
   }
+  let front = 0;
 
-  // Правий прохід: кількість операцій справа
-  count = 0; // кількість кульок праворуч
-  ops = 0;   // сума операцій для переміщення цих кульок
-  for (let i = n - 1; i >= 0; i--) {
-    result[i] += ops;
-    count += boxes[i] === '1' ? 1 : 0;
-    ops += count;
+
+  while (front < queue.length) {
+    const [x, y] = queue[front];
+
+    for (const [dx, dy] of directions) {
+      const newX = x + dx;
+      const newY = y + dy;
+
+
+
+        if (newX >= 0 && newX < n && newY >= 0 && newY < m && height[newX][newY] === -1) {
+          height[newX][newY] = height[x][y] + 1;
+        queue.push([newX, newY]);
+      }
+    }
+    front++;
   }
+  return height;
 
-  return result;
 };
 
-const boxes = "110";
-const result = minOperations(boxes);
+const isWater = [[0,1],[0,0]];
+const result = highestPeak(isWater);
 console.log(result);
+
