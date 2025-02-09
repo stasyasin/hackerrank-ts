@@ -37,6 +37,9 @@ export function maxVacation(vacations: Record<string, number>, restrictions: Res
           dp[month][i] = Math.max(dp[month][i], dp[month - 1][j] + vacations[countries[i]]);
         }
       }
+      if (dp[month][i] === 0) {
+        dp[month][i] = dp[month - 1][i]; // Якщо не оновилось, беремо попереднє значення
+      }
     }
   }
 
